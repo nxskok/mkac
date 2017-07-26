@@ -9,6 +9,9 @@ var_kendall_S(x)
 \arguments{
 \item{x}{numeric, a time series (only its length is used)}
 }
+\value{
+the variance (a number)
+}
 \description{
 Variance of Kendall correlation S statistic under null hypothesis of no trend and assuming independence
 }

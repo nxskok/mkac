@@ -1,7 +1,7 @@
 #' Variance of Kendall correlation S statistic under null hypothesis of no trend and assuming independence
 #' 
 #' @param x numeric, a time series (only its length is used)
-#' @result the variance (a number)
+#' @return the variance (a number)
 #' 
 #' @author Ken Butler, \email{butler@utsc.utoronto.ca}
 #' 

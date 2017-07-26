@@ -17,6 +17,13 @@ data frame showing terms in sum
 \description{
 display calculations for sum in adjustment for autocorrelation (mainly for debugging)
 }
+\examples{
+library(forecast)
+set.seed(457298)
+xx=arima.sim(list(ar=0.8),100) # posoitively autocorrelated, sample size ratio > 1
+sum_df(xx
+
+}
 \author{
 Ken Butler, \email{butler@utsc.utoronto.ca}
 }
