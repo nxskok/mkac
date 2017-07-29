@@ -12,6 +12,7 @@
 #' ts_plot(x)
 #' 
 #' @import ggplot2
+#' 
 #' @export
 
 ts_plot <-

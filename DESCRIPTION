@@ -3,9 +3,10 @@ Type: Package
 Title: Mann-Kendall correlation for possibly autocorrelated time series
 Version: 1.0
 Date: 2017-07-26
-Author: Ken Butler
-Maintainer: Ken Butler <butler@utsc.utoronto.ca>
+Authors@R: person("Ken","Butler", email="butler@utsc.utoronto.ca",
+  role=c("aut","cre"))
 Description: A re-do of part of the fume package to be (hopefully) feasible for larger data sets
-License: What license is it under?
+License: GPL-3
 RoxygenNote: 6.0.1
 Imports: tidyverse
+Suggests: forecast

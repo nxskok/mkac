@@ -18,8 +18,6 @@ list: unadjusted and adjusted Z statistics, effective sample size ratio, unadjus
 Mann-Kendall correlation test, unadjusted and adjusted for autocorrelation, with P-values
 }
 \examples{
-library(forecast)
-
 set.seed(457299)
 x=rnorm(100) # uncorrelated (no adjustment needed)
 x=x+0.02*(1:100) # with trend
@@ -27,7 +25,7 @@ kendall_Z_adjusted(x)
 
 # ar(1) data
 set.seed(457298)
-xx=arima.sim(list(ar=0.8),100) # autocorrelated, needs adjusting
+xx=forecast::arima.sim(list(ar=0.8),100) # autocorrelated, needs adjusting
 kendall_Z_adjusted(xx)
 # P-value adjusted is much less significant
 

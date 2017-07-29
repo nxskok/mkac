@@ -8,9 +8,8 @@
 #' @author Ken Butler, \email{butler@utsc.utoronto.ca}
 #' 
 #' @examples
-#' library(forecast)
 #' set.seed(457298)
-#' xx=arima.sim(list(ar=0.8),100) # posoitively autocorrelated, sample size ratio > 1
+#' xx=forecast::arima.sim(list(ar=0.8),100) # posoitively autocorrelated, sample size ratio > 1
 #' sum_df(xx
 #' 
 #' @import tidyverse
