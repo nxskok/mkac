@@ -18,12 +18,12 @@ list: unadjusted and adjusted Z statistics, effective sample size ratio, unadjus
 Mann-Kendall correlation test, unadjusted and adjusted for autocorrelation, with P-values
 }
 \examples{
-library(forecast)
+
 
 set.seed(457299)
 x=rnorm(100) # uncorrelated (no adjustment needed)
 x=x+0.02*(1:100) # with trend
-kendall_Z-adjusted(x)
+kendall_Z_adjusted(x)
 
 # ar(1) data
 set.seed(457298)
