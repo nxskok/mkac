@@ -8,7 +8,7 @@
 #' @author Ken Butler, \email{butler@utsc.utoronto.ca}
 #' 
 #' @examples 
-#' library(forecast)
+#' 
 #' 
 #' set.seed(457299)
 #' x=rnorm(100) # uncorrelated (no adjustment needed)
@@ -21,7 +21,7 @@
 #' kendall_Z_adjusted(xx)
 #' # P-value adjusted is much less significant
 #' 
-#' @import forecast
+#' @import stats
 #' @export
 #' 
 kendall_Z_adjusted <-
