@@ -7,6 +7,8 @@
 #' 
 #' @author Ken Butler, \email{butler@utsc.utoronto.ca}
 #' 
+#' @details Missing values are automatically removed.
+#' 
 #' @examples 
 #' 
 #' 
@@ -26,6 +28,8 @@
 #' 
 kendall_Z_adjusted <-
 function(x,...) {
+  # remove missings (since will return NA otherwise)
+  x=x[!is.na(x)]
   S=kendall_S(x)
   V=var_kendall_S(x)
   Z=S/sqrt(V)

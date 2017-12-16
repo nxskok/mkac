@@ -17,6 +17,9 @@ list: unadjusted and adjusted Z statistics, effective sample size ratio, unadjus
 \description{
 Mann-Kendall correlation test, unadjusted and adjusted for autocorrelation, with P-values
 }
+\details{
+Missing values are automatically removed.
+}
 \examples{
 
 
