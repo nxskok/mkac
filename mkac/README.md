@@ -1,1 +1,2 @@
-add
+Mann-Kendall and Theil-Sen 
+
