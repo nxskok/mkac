@@ -4,16 +4,21 @@
 \alias{theil_sen_slope}
 \title{Theil-Sen slope with time}
 \usage{
-theil_sen_slope(x)
+theil_sen_slope(x, tt = seq_along(x))
 }
 \arguments{
 \item{x}{numeric, a time series}
+
+\item{tt}{numeric, optional vector of times (if omitted, defaults to `1:length(x)`)}
 }
 \value{
 the Theil-Sen slope, a number
 }
 \description{
 Theil-Sen slope with time
+}
+\details{
+Assumes no missing values in `x`.
 }
 \examples{
 theil_sen_slope(c(2,3,5,10))
