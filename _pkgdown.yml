@@ -1,4 +1,3 @@
 template:
   params:
     bootswatch: cerulean # or choose another
-    

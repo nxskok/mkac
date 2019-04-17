@@ -12,7 +12,7 @@ You can install the released version of mkac from
 devtools::install_github("nxskok/mkac")
 ```
 
-## Packages
+## Packages (for examples below)
 
 ``` r
 library(tidyverse)
