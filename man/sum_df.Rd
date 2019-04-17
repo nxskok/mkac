@@ -19,8 +19,8 @@ display calculations for sum in adjustment for autocorrelation (mainly for debug
 }
 \examples{
 set.seed(457298)
-xx=forecast::arima.sim(list(ar=0.8),100) # posoitively autocorrelated, sample size ratio > 1
-sum_df(xx
+xx=stats::arima.sim(list(ar=0.8),100) # posoitively autocorrelated, sample size ratio > 1
+sum_df(xx)
 
 }
 \author{

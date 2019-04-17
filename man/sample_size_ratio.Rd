@@ -19,7 +19,7 @@ ratio of actual to effective sample sizes for possibly autocorrelated time serie
 }
 \examples{
 set.seed(457298)
-xx=forecast::arima.sim(list(ar=0.8),100) # posoitively autocorrelated, sample size ratio > 1
+xx=stats::arima.sim(list(ar=0.8),100) # posoitively autocorrelated, sample size ratio > 1
 sample_size_ratio(xx)
 
 }

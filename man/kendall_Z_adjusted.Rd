@@ -25,7 +25,7 @@ kendall_Z_adjusted(x)
 
 # ar(1) data
 set.seed(457298)
-xx=forecast::arima.sim(list(ar=0.8),100) # autocorrelated, needs adjusting
+xx=stats::arima.sim(list(ar=0.8),100) # autocorrelated, needs adjusting
 kendall_Z_adjusted(xx)
 # P-value adjusted is much less significant
 

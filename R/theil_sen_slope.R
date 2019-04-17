@@ -19,5 +19,5 @@ function(x) {
   # elementwise division is almost right, except 0/0 on diag
   m3=m1/m2
   x=m3[lower.tri(m3)]
-  median(x)
+  stats::median(x)
 }

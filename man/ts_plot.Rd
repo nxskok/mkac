@@ -8,6 +8,8 @@ ts_plot(x, time = 1:length(x))
 }
 \arguments{
 \item{x}{numeric, a time series}
+
+\item{time}{numeric, the time points of the time series (default `1:n` where `n` is length of series)}
 }
 \value{
 a ggplot plot

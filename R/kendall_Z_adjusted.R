@@ -15,7 +15,7 @@
 #' 
 #' # ar(1) data
 #' set.seed(457298)
-#' xx=forecast::arima.sim(list(ar=0.8),100) # autocorrelated, needs adjusting
+#' xx=stats::arima.sim(list(ar=0.8),100) # autocorrelated, needs adjusting
 #' kendall_Z_adjusted(xx)
 #' # P-value adjusted is much less significant
 #' 
@@ -29,7 +29,7 @@ function(x,...) {
   r=sample_size_ratio(x,...)
   V_star=V*r
   Z_star=S/sqrt(V_star)
-  P_orig=2*(1-pnorm(abs(Z)))
-  P_adj=2*(1-pnorm(abs(Z_star)))
+  P_orig=2*(1-stats::pnorm(abs(Z)))
+  P_adj=2*(1-stats::pnorm(abs(Z_star)))
   list(z=Z,z_star=Z_star,ratio=r,P_value=P_orig,P_value_adj=P_adj)
 }
