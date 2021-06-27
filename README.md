@@ -16,14 +16,14 @@ devtools::install_github("nxskok/mkac")
 
 ``` r
 library(tidyverse)
-#> ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
-#> ✔ ggplot2 3.1.1          ✔ purrr   0.3.2     
-#> ✔ tibble  2.1.1          ✔ dplyr   0.8.0.1   
-#> ✔ tidyr   0.8.3.9000     ✔ stringr 1.4.0     
-#> ✔ readr   1.3.1          ✔ forcats 0.3.0
-#> ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ dplyr::filter() masks stats::filter()
-#> ✖ dplyr::lag()    masks stats::lag()
+#> ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+#> ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
+#> ✓ tibble  3.1.2     ✓ dplyr   1.0.6
+#> ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+#> ✓ readr   1.4.0     ✓ forcats 0.5.1
+#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+#> x dplyr::filter() masks stats::filter()
+#> x dplyr::lag()    masks stats::lag()
 library(mkac)
 ```
 
@@ -91,7 +91,8 @@ Consider world mean temperatures by year:
 my_url="http://www.utsc.utoronto.ca/~butler/d29/temperature.csv"
 temp=read_csv(my_url)
 #> Warning: Missing column names filled in: 'X1' [1]
-#> Parsed with column specification:
+#> 
+#> ── Column specification ────────────────────────────────────────────────────────
 #> cols(
 #>   X1 = col_double(),
 #>   Year = col_date(format = ""),
@@ -178,21 +179,121 @@ theil_sen_slope(temp$temperature)
 #> [1] 0.005675676
 ```
 
-The trend appears to be approximately linear up to about 1970, and
-approximately linear after that, but with a steeper trend. We might
-calculate and compare two separate Theil-Sen slopes,
-thus:
+This way of running `theil_sen_slope` assumes that the time points are
+equally spaced. If they are not, for example, you have removed some time
+points with missing values for the time series (see below for an
+example), run `theil_sen_slope` with *two* inputs. Or run it with two
+inputs anyway, to get the same result as above:
+
+``` r
+with(temp, theil_sen_slope(y = temperature, x = year))
+#> [1] 0.005675676
+```
+
+See below for another example of running `theil_sen_slope` this way, in
+the context of having removed missing values.
+
+From our graph, the trend appears to be approximately linear up to about
+1970, and approximately linear after that, but with a steeper trend. We
+might calculate and compare two separate Theil-Sen slopes, thus:
 
 ``` r
 temp %>% mutate(time_period=ifelse(year<=1970, "pre-1970", "post-1970")) %>% 
-  nest(-time_period) %>% 
-  mutate(theil_sen=map_dbl(data, ~theil_sen_slope(.$temperature)))
+  rowwise() %>% 
+  nest_by(time_period) %>% 
+  mutate(theil_sen=theil_sen_slope(data$temperature))
 #> # A tibble: 2 x 3
-#>   time_period data              theil_sen
-#>   <chr>       <list>                <dbl>
-#> 1 pre-1970    <tibble [91 × 4]>   0.00429
-#> 2 post-1970   <tibble [40 × 4]>   0.0168
+#> # Rowwise:  time_period
+#>   time_period               data theil_sen
+#>   <chr>       <list<tibble[,4]>>     <dbl>
+#> 1 post-1970             [40 × 4]   0.0168 
+#> 2 pre-1970              [91 × 4]   0.00429
 ```
 
 Theil-Sen slope is very nearly *four times* as big since 1970
 vs. before, and even then, appears to be increasing with time.
+
+## Missing values and irregular time series
+
+Your time series might contain missing values, or might be sampled at
+irregular intervals. The recommended way to handle a time series with
+missing values, at least for the purposes of Mann-Kendall or Theil-Sen,
+is to remove the rows with missing values, converting it into a time
+series sampled at irregular intervals.
+
+This has no impact on Mann-Kendall (a pair of points in a time series
+are concordant or discordant regardless of how far apart they are in
+time), but it does matter for Theil-Sen, since the distance apart in
+time affects the pairwise slope. This means using the two-input version
+of `theil_sen_slope` referred to above, having first removed any missing
+time-series values and their accompanying time points. Here is a small
+example:
+
+``` r
+ts <- tribble(
+  ~year, ~value,
+    1,      2,
+    2,      5,
+    3,      4,
+    4,     NA,
+    5,     10
+)
+ts
+#> # A tibble: 5 x 2
+#>    year value
+#>   <dbl> <dbl>
+#> 1     1     2
+#> 2     2     5
+#> 3     3     4
+#> 4     4    NA
+#> 5     5    10
+```
+
+First remove any rows with missing values:
+
+``` r
+ts %>% drop_na(value) -> ts1
+ts1
+#> # A tibble: 4 x 2
+#>    year value
+#>   <dbl> <dbl>
+#> 1     1     2
+#> 2     2     5
+#> 3     3     4
+#> 4     5    10
+```
+
+Mann-Kendall still works:
+
+``` r
+kendall_Z_adjusted(ts1$value)
+#> $z
+#> [1] 1.358732
+#> 
+#> $z_star
+#> [1] 1.358732
+#> 
+#> $ratio
+#> [1] 1
+#> 
+#> $P_value
+#> [1] 0.1742314
+#> 
+#> $P_value_adj
+#> [1] 0.1742314
+```
+
+but now we need the two-input version of `theil_sen_slope`:
+
+``` r
+with(ts1, theil_sen_slope(y = value, x = year))
+#> [1] 1.833333
+```
+
+If you are not familiar with `with`, this way also works, less
+elegantly:
+
+``` r
+theil_sen_slope(y = ts1$value, x = ts1$year)
+#> [1] 1.833333
+```
