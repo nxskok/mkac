@@ -4,10 +4,12 @@
 \alias{theil_sen_slope}
 \title{Theil-Sen slope with time}
 \usage{
-theil_sen_slope(x)
+theil_sen_slope(y, x = 1:length(y))
 }
 \arguments{
-\item{x}{numeric, a time series}
+\item{y}{numeric, a time series}
+
+\item{x}{numeric, the time points of the time series (optional, defaults to 1, 2, ...)}
 }
 \value{
 the Theil-Sen slope, a number
@@ -17,6 +19,8 @@ Theil-Sen slope with time
 }
 \examples{
 theil_sen_slope(c(2,3,5,10))
+theil_sen_slope(y = c(2,3,5,10), x = 1:4)
+theil_sen_slope(y = c(2,3,5,10), x = c(1, 2, 3, 5))
 
 }
 \author{
