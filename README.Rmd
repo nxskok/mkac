@@ -17,7 +17,18 @@ knitr::opts_chunk$set(
 
 ## Installation
 
-You can install the released version of mkac from [Github](https://github.com/nxskok/mkac) with:
+The `mkac` package is available on r-universe:
+
+```{r}
+options(repos = c(
+  ken = 'https://nxskok.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'
+))
+install.packages("mkac")
+```
+
+
+You can also install from [Github](https://github.com/nxskok/mkac) with:
 
 ```{r, eval=F}
 devtools::install_github("nxskok/mkac")

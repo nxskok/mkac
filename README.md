@@ -5,8 +5,19 @@
 
 ## Installation
 
-You can install the released version of mkac from
-[Github](https://github.com/nxskok/mkac) with:
+The `mkac` package is available on r-universe:
+
+``` r
+options(repos = c(
+  ken = 'https://nxskok.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'
+))
+install.packages("mkac")
+#> Installing package into '/home/ken/R/x86_64-pc-linux-gnu-library/4.3'
+#> (as 'lib' is unspecified)
+```
+
+You can also install from [Github](https://github.com/nxskok/mkac) with:
 
 ``` r
 devtools::install_github("nxskok/mkac")
@@ -16,14 +27,16 @@ devtools::install_github("nxskok/mkac")
 
 ``` r
 library(tidyverse)
-#> ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-#> ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
-#> ✓ tibble  3.1.2     ✓ dplyr   1.0.6
-#> ✓ tidyr   1.1.3     ✓ stringr 1.4.0
-#> ✓ readr   1.4.0     ✓ forcats 0.5.1
+#> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+#> ✔ dplyr     1.1.2     ✔ readr     2.1.4
+#> ✔ forcats   1.0.0     ✔ stringr   1.5.0
+#> ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+#> ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+#> ✔ purrr     1.0.1     
 #> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
+#> ✖ dplyr::filter() masks stats::filter()
+#> ✖ dplyr::lag()    masks stats::lag()
+#> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 library(mkac)
 ```
 
@@ -38,29 +51,29 @@ analysis of data collected over time:
 ## The Mann-Kendall correlation
 
 The first question is attacked using the Mann-Kendall correlation, which
-is the Kendall correlation where the \(x\)-variable is time. This is a
+is the Kendall correlation where the $x$-variable is time. This is a
 non-parametric correlation that does not assume linearity and is not
 damaged by outliers. See [this Wikipedia
 page](https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient)
 for details. It will thus detect non-linear but monotonic trends.
 
 The Mann-Kendall correlation is based on the idea of “concordant” and
-“discordant” pairs. Suppose the variable measured over time is called
-y, and consider two values of y measured at different time points:
+“discordant” pairs. Suppose the variable measured over time is called y,
+and consider two values of y measured at different time points:
 
-  - if y is smaller for the earlier time point, the pair is called
-    **concordant**;
-  - if y is *larger* for the earlier time point, the pair is called
-    **discordant**;
-  - if the two values of y are the same, the pair is neither concordant
-    nor discordant, and is ignored in the calculation of the Kendall
-    correlation.
+- if y is smaller for the earlier time point, the pair is called
+  **concordant**;
+- if y is *larger* for the earlier time point, the pair is called
+  **discordant**;
+- if the two values of y are the same, the pair is neither concordant
+  nor discordant, and is ignored in the calculation of the Kendall
+  correlation.
 
 The names reflect whether or not the pair of observations is in the same
 order as time; a concordant pair shows an “uphill” trend, and a
 discordant pair a “downhill” trend:
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 The Mann-Kendall correlation is then obtained by considering all
 possible pairs of observations, and counting up the total number of
@@ -90,18 +103,17 @@ Consider world mean temperatures by year:
 ``` r
 my_url="http://www.utsc.utoronto.ca/~butler/d29/temperature.csv"
 temp=read_csv(my_url)
-#> Warning: Missing column names filled in: 'X1' [1]
-#> 
-#> ── Column specification ────────────────────────────────────────────────────────
-#> cols(
-#>   X1 = col_double(),
-#>   Year = col_date(format = ""),
-#>   temperature = col_double(),
-#>   year = col_double()
-#> )
+#> New names:
+#> Rows: 131 Columns: 4
+#> ── Column specification
+#> ──────────────────────────────────────────────────────── Delimiter: "," dbl
+#> (3): ...1, temperature, year date (1): Year
+#> ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+#> Specify the column types or set `show_col_types = FALSE` to quiet this message.
+#> • `` -> `...1`
 temp
-#> # A tibble: 131 x 4
-#>       X1 Year       temperature  year
+#> # A tibble: 131 × 4
+#>     ...1 Year       temperature  year
 #>    <dbl> <date>           <dbl> <dbl>
 #>  1     1 1880-12-31        13.7  1880
 #>  2     2 1881-12-31        13.8  1881
@@ -113,12 +125,12 @@ temp
 #>  8     8 1887-12-31        13.6  1887
 #>  9     9 1888-12-31        13.7  1888
 #> 10    10 1889-12-31        13.8  1889
-#> # … with 121 more rows
+#> # ℹ 121 more rows
 ggplot(temp, aes(x=year, y=temperature)) + geom_point() + geom_smooth()
-#> `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+#> `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
 This appears to show an upward trend, but with a lot of variability. Is
 that statistically significant?
@@ -143,12 +155,12 @@ kendall_Z_adjusted(temp$temperature)
 
 This says, for testing that the Mann-Kendall correlation is zero:
 
-  - Under the assumption of independent observations, the test statistic
-    is z=11.77 with a P-value of zero.
-  - Under the assumption of autocorrelated observations, the test
-    statistic is z=4.48 with a P-value of 0.0000076.
-  - The autocorrelation makes the “effective sample size” 6.91 times
-    smaller.
+- Under the assumption of independent observations, the test statistic
+  is z=11.77 with a P-value of zero.
+- Under the assumption of autocorrelated observations, the test
+  statistic is z=4.48 with a P-value of 0.0000076.
+- The autocorrelation makes the “effective sample size” 6.91 times
+  smaller.
 
 Because the temperatures are positively autocorrelated, the trend is
 strongly significant, but not as significant as it would be if the
@@ -202,7 +214,7 @@ temp %>% mutate(time_period=ifelse(year<=1970, "pre-1970", "post-1970")) %>%
   rowwise() %>% 
   nest_by(time_period) %>% 
   mutate(theil_sen=theil_sen_slope(data$temperature))
-#> # A tibble: 2 x 3
+#> # A tibble: 2 × 3
 #> # Rowwise:  time_period
 #>   time_period               data theil_sen
 #>   <chr>       <list<tibble[,4]>>     <dbl>
@@ -239,7 +251,7 @@ ts <- tribble(
     5,     10
 )
 ts
-#> # A tibble: 5 x 2
+#> # A tibble: 5 × 2
 #>    year value
 #>   <dbl> <dbl>
 #> 1     1     2
@@ -254,7 +266,7 @@ First remove any rows with missing values:
 ``` r
 ts %>% drop_na(value) -> ts1
 ts1
-#> # A tibble: 4 x 2
+#> # A tibble: 4 × 2
 #>    year value
 #>   <dbl> <dbl>
 #> 1     1     2
