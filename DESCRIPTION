@@ -7,13 +7,12 @@ Authors@R: person("Ken","Butler", email="butler@utsc.utoronto.ca",
   role=c("aut","cre"))
 Description: A re-do of part of the fume package to be (hopefully) feasible for larger data sets.
 License: MIT + file LICENSE
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 Suggests: forecast
 Imports:
     ggplot2,
     stats,
     tibble,
     magrittr,
-    dplyr,
-    rlang
+    dplyr
 Encoding: UTF-8
